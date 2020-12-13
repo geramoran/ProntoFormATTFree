@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class warehouse extends Model
 {
     use HasFactory;
-    protected $table = 'warehouse';
+    protected $table = 'warehouses';
     protected $primaryKey = 'id';
     protected $fillable = ["name"];
     public $incrementing = true;

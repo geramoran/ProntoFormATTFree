@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class storage extends Model
 {
     use HasFactory;
-    protected $table = 'storage';
+    protected $table = 'storages';
     protected $primaryKey = 'id';
     protected $fillable = ['place', 'unit'];
     public $incrementing = true;

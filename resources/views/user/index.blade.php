@@ -29,18 +29,15 @@
             </tr>
         </tbody>
     </table>
+    @include('user.create')
+    @include('user.edit')
 </main>
-@include('user.create')
-@include('user.edit')
 @endsection
 
 @section('js')
 <script>
     new Vue({
         el: '#crud',
-        created: function(){
-            $('#Unit_table').DataTable();
-        },
         beforeMount: function() {
             this.crud = this.$el.attributes['crud'].value;
         },
@@ -52,84 +49,54 @@
             errors: '',
             crud: '',
             getCrudList: [],
-            getCrudDetail: {
-                client: {},
-                product: {
-                    client: {}
-                },
-                relplace: {
-                    warehouse: {},
-                    locate: {},
-                    level: {}
-                },
-                warehouse: {},
-                locate: {},
-                level: {}
+            user: {
+                username: '',
+                email: '',
+                password: '',
+                roles_id: '',
+                prontoform_user: '',
+                name: '',
+                phone: '',
+                address: '',
+                city: '',
+                state: '',
+                zipcode: ''
             },
-            fd: [],
-            unit: '',
-            unitsRows: [],
-            client: '',
-            products: ''
+            passwordRep: '',
+            roles: ''
         },
         methods: {
             getCrud: function(){
-                axios.get(this.crud + '/all').then(response => {
+                axios.get('user/all').then(response => {
                     this.getCrudList = response.data;
+                    axios.get('user/roles').then(response => {
+                        this.roles = response.data;
+                    });
                 });
             },
             createCrud: function(){
-                switch(this.crud){
-                    case 'user':
-                        this.fd = new FormData(document.getElementById('createUser'));
-                    break;
+                var req = {
+                    user: this.user,
+                    userdetail: this.userdetail
                 }
-                axios.post(this.crud, this.fd).then(response => {
+                axios.post(this.crud, this.user).then(response => {
                     this.getCrud(this.crud);
                     $('#create').modal('hide');
                     //toastr.success('Creada con éxito');
-                    this.fd = [];
                 }).catch(error => {
                     this.errors = 'Corrija para poder crear con éxito';
-                    this.fd = [];
-                });
-            },
-            detailCrud: function(idCrud){
-                axios.get(this.crud + '/' + idCrud).then( response => {
-                    this.getCrudDetail = response.data;
-                    $('#detail').modal('show');
                 });
             },
             editCrud: function(idCrud){
                 $('.modal').modal('hide');
                 axios.get(this.crud + '/' + idCrud + '/edit').then( response => {
-                    this.getCrudDetail = response.data;
+                    this.user = response.data;
                     $('#edit').modal('show');
                 });
             },
             updateCrud: function(idCrud){
                 var sendUp = '';
                 switch(this.crud){
-                    case 'product':
-                        sendUp = {
-                            "name": this.getCrudDetail.product.name,
-                            "client_id": this.getCrudDetail.product.client_id,
-                            "costoEntrega": this.getCrudDetail.product.costoEntrega,
-                            "costoDevolucion": this.getCrudDetail.product.costoDevolucion,
-                            "Peso": this.getCrudDetail.product.Peso,
-                            "comisionEntrega": this.getCrudDetail.product.comisionEntrega,
-                            "comisionDevolucion": this.getCrudDetail.product.comisionDevolucion,
-                            "tiempoCierre": this.getCrudDetail.product.tiempoCierre,
-                            "nivelServicio": this.getCrudDetail.product.nivelServicio
-                        };
-                    break;
-                    case 'place':
-                        sendUp = {
-                            "warehouse_id": this.getCrudDetail.relplace.warehouse_id,
-                            "locate_id": this.getCrudDetail.relplace.locate_id,
-                            "level_id": this.getCrudDetail.relplace.level_id,
-                        };
-                    break;
                     case 'user':
                         sendUp: {
 

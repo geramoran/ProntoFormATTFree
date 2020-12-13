@@ -50,6 +50,13 @@ class RemesaController extends Controller
     public function store(Request $request)
     {
         $remesaAll = remesa::whereYear('dateArrive', date('Y'))->whereMonth('dateArrive', date('m'))->get();
+        $cs = catalogStatus::where('client_id', $request->remesa['client_id'])->where('type', 'Recoleccion - Remesa')->first();
+        $csid = 0;
+        if(empty($cs)){
+            $csid = catalogStatus::where('type', 'Recoleccion - Remesa')->where('client_id', null)->first()->id;
+        } else{
+            $csid->id;
+        }
         $count = $remesaAll->count();
         $remesaId = $request->remesa['remesaFormat'] . $count;
         $remesaDB = new remesa;
@@ -63,7 +70,7 @@ class RemesaController extends Controller
         $remesaDB->save();
         foreach ($request->unidades as $unidad){
             $unitDB = new unit;
-            $unitDB->idstatus = 1;
+            $unitDB->idstatus = $csid;
             $unitDB->remesa = $remesaId;
             $unitDB->barcode = $unidad["id"];
             $unitDB->idproduct = $request->remesa["product_id"];
@@ -86,7 +93,7 @@ class RemesaController extends Controller
 
     public function detail($id){
         $rem = remesa::with(['catalogStatus', 'clients'])->find($id);
-        $units = remesa::find($id)->units;
+        $units = unit::with('product')->where('remesa', $id)->get();
         return [
             'remesa' => $rem,
             'unidades' => $units
@@ -113,6 +120,13 @@ class RemesaController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $cs = catalogStatus::where('client_id', $request->remesa['client_id'])->where('type', 'Recoleccion - Remesa')->first();
+        $csid = 0;
+        if(empty($cs)){
+            $csid = catalogStatus::where('type', 'Recoleccion - Remesa')->where('client_id', null)->first()->id;
+        } else{
+            $csid->id;
+        }
         unit::where('remesa', $id)->delete();
         $remesaDB = remesa::find($id);
         $remesaDB->status_id = $request->remesa['status_id'];
@@ -124,7 +138,7 @@ class RemesaController extends Controller
         $remesaDB->save();
         foreach($request->unidades as $unidad){
             $unitDB = new unit;
-            $unitDB->idstatus = 1;
+            $unitDB->idstatus = $csid;
             $unitDB->remesa = $id;
             $unitDB->barcode = $unidad["barcode"];
             $unitDB->idproduct = $request->remesa["product_id"];

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class locate extends Model
 {
     use HasFactory;
-    protected $table = 'locate';
+    protected $table = 'locates';
     protected $primaryKey = 'id';
     protected $fillable = ["name"];
     public $incrementing = true;

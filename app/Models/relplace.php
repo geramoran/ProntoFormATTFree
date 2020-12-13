@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class relplace extends Model
 {
     use HasFactory;
-    protected $table = 'relplace';
+    protected $table = 'relplaces';
     protected $primaryKey = 'id';
     protected $fillable = ['locate_id', 'warehouse_id', 'level_id'];
     public $incrementing = true;

@@ -16,9 +16,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/despacho">
+                <a class="nav-link" href="/remesa">
                     <span data-feather="layers"></span>
-                    Despacho
+                    Recolección
                 </a>
             </li>
             <li class="nav-item">
@@ -28,15 +28,21 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/remesa">
+                <a class="nav-link" href="/despacho">
                     <span data-feather="layers"></span>
-                    Recolección
+                    Despacho
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/recibo">
                     <span data-feather="layers"></span>
                     Recibo
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/reportes">
+                    <span data-feather="layers"></span>
+                    Reportes
                 </a>
             </li>
             <li class="nav-item">
@@ -58,9 +64,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/usertype">
+                <a class="nav-link" href="/roles">
                     <span data-feather="layers"></span>
-                    Tipos de Usuarios
+                    Roles de Usuarios
                 </a>
             </li>
             <li class="nav-item">

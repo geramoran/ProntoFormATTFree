@@ -1,4 +1,4 @@
-<form method="POST" @submit.prevent="createCrud" id="createArea">
+<form method="POST" id="createArea" @submit.prevent="createCrud">
     @csrf
     <div class="modal fade" id="create">
         <div class="modal-dialog">

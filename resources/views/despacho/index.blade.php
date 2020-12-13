@@ -17,6 +17,7 @@
                 <th>Usuario</th>
                 <th>Cantidad de productos</th>
                 <th>Monto</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -26,9 +27,10 @@
                 <td>@{{desp.user}}</td>
                 <td>@{{desp.count}}</td>
                 <td>@{{desp.mount}}</td>
+                <td>@{{desp.status}}</td>
                 <td>
-                    <a :href="'edit/' + desp.id" class="btn btn-primary">Detalles</a>
-                    <a href="/free" class="btn btn-primary">Liberar</a>
+                    <a :href="'/despacho/' + desp.id" class="btn btn-primary">Detalles</a>
+                    <a :href="'/despacho/' + desp.id + '/free'" class="btn btn-primary">Liberar</a>
                 </td>
             </tr>
         </tbody>
@@ -49,17 +51,17 @@
         data: {
             getCrudList: {},
             getCrudDetail: {},
-            crud: ''
+            crud: '',
+            getStatus: ''
         },
         methods: {
             getCrud: function(){
                 axios.get(this.crud + '/all').then(response => {
-                    //this.getCrudList = response.data;
                     var aUnit = [];
                     response.data.forEach(function(ud){
-                        console.log(ud);
                         var sum = 0;
                         var count = 0;
+                        var stat = '';
                         if(ud.unitdeliveries != null){
                             ud.unitdeliveries.forEach(function(u){
                                 sum += u.mount;
@@ -70,13 +72,20 @@
                             id: ud.id,
                             user: ud.user.username,
                             count: count,
-                            mount: sum
+                            mount: sum,
+                            status_id: ud.unitdeliveries[0]['visitStatus'],
+                            status: ''
                         };
                         aUnit.push(unit);
                     });
                     this.getCrudList = aUnit;
+                    this.getCrudList.forEach(function(u){
+                        axios.get('despacho/status/' + u.status_id).then( resp =>{
+                            u.status = resp.data;
+                        });
+                    });
                 });
-            }
+            },
         }
     });
 

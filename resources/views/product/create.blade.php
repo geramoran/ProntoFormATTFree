@@ -32,8 +32,8 @@
                         <input type="text" class="form-control" name="costoDevolucion" id="costoDevolucion">
                     </div>
                     <div class="form-group">
-                        <label for="Peso">Peso</label>
-                        <input type="text" class="form-control" name="Peso" id="Peso">
+                        <label for="Peso">Peso (en Kg)</label>
+                        <input type="text" class="form-control" name="Peso" id="Peso" placeholder="Ej: 1, 1.5, .900">
                     </div>
                     <div class="form-group">
                         <label for="comisionEntrega">Comisión de entrega</label>

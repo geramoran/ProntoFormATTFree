@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class unit extends Model
 {
     use HasFactory;
-    protected $table = 'unit';
+    protected $table = 'units';
     protected $primaryKey = 'id';
-    protected $fillable = ['idstatus', 'remesa', 'barcode', 'idproduct', 'mount'];
+    protected $fillable = ['idstatus', 'remesa', 'barcode', 'idProduct', 'mount', 'count'];
     public $incrementing = true;
     public $timestamps = false;
+
+    public function product(){
+        return $this->belongsTo(product::class, 'idProduct', 'id');
+    }
 }

@@ -1,131 +1,154 @@
 @extends('layout.base')
 
 @section('title')
-    <title>Prontoform At&t - Nueva Recolección</title>
+    <title>Prontoform At&t - Reportes</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endsection
 
 @section('content')
-<main id="recoleccionLoad" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" crud="remesa">
+<main id="crud" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" crud="reportes">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-        <h1 class="h1">Nueva Recoleccion</h1>
-        <div>
-            <a type="button" class="btn btn-primary" href="/remesa">Regresar</a>
-            <input type="button" value="Agregar" class="btn btn-primary" @click="sendAll">
-        </div>
+        <h1 class="h1">Reportes</h1>
+        <a href="#" class="btn btn-primary pull-right">Buscar</a>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="client_id">Cliente</label>
-            <select name="client_id" id="client" class="form-control" @change="getProduct($event)" v-model="remesa.client_id">
+            <select name="client_id" id="client" class="form-control" @change="getProduct($event)" v-model="reporte.client_id">
+                <option value="0" selected>Todos</option>
                 <option v-for="c in client" :value="c.id">@{{c.id}} - @{{c.name}}</option>
             </select>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="product_id">Producto</label>
-            <select name="product_id" id="product_id" class="form-control" @change="getProductSelected($event)" v-model="remesa.product_id" disabled>
+            <select name="product_id" id="product_id" class="form-control" @change="" v-model="reporte.product_id">
+                <option value="0" selected>Todos</option>
                 <option v-for="p in product" :value="p.id">@{{p.id}} - @{{p.name}}</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="product_id">Estatus</label>
+            <select name="product_id" id="status_id" class="form-control" @change=" " v-model="reporte.status_id">
+                <option v-for="p in status" :value="p.id">@{{p.id}} - @{{p.name}}</option>
             </select>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="dateArrive">Fecha de llegada</label>
-            <input type="text" class="form-control" name="dateArrive" id="dateArrive" v-model="remesa.dateArrive" disabled>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="dateClose">Fecha de cierre</label>
-            <input type="text" class="form-control" name="dateClose" id="dateClose"  v-model="remesa.dateClose" disabled>
-        </div>
-        <div class="form-group col-md-4">
-            <label for="mountTotal">Total de monto de cobro</label>
-            <input type="text" class="form-control" name="mountTotal" id="mountTotal" v-model="remesa.mountTot" disabled>
-        </div>
-    </div>
-    <br>
-    <div>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h3 class="h3">Unidades registradas</h3>
-            <label>Total de unidades: @{{unidades.length}}</label>
-        </div>
-
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Numero de unidad" name="unit_id" id="unit_id" v-model="unidad.unit_id" @keyup.enter="changeFocusMount" disabled>
-            <input type="text" class="form-control" placeholder="monto" name="unit_mount" id="unit_mount" v-model="unidad.unit_mount" @keyup.enter="addTable" disabled>
-            <div class="input-group-append">
-                <button class="btn btn-outline-success" type="button" id="buttonUnit" v-on:click.prevent="addTable" disabled>Agregar</button>
+            <label for="product_id">Tiempo de almacen</label>
+            <div class="input-group-prepend">
+                <input type="text" placeholder="De..." aria-label="Fecha inicial" class="form-control datepicker" style="padding: 0.25rem 0.25rem">
+                <input type="text" placeholder="Al..." aria-label="Fecha final" class="form-control datepicker" style="padding: 0.25rem 0.25rem">
             </div>
         </div>
-        <table id="Unit_table" class="table display">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Monto</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(unit, index) in unidades">
-                    <td>@{{unit.id}}</td>
-                    <td>@{{unit.mount}}</td>
-                    <td>
-                        <button class="btn btn-danger" @click="deleteUnit(index)">Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="form-group col-md-4">
+            <label for="product_id">Fecha de entregas</label>
+            <input type="text" aria-label="Fecha entrega" class="form-control datepicker">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="product_id">Codigo de Unidad</label>
+            <input type="text" aria-label="Fecha entrega" class="form-control datepicker">
+        </div>
     </div>
+    <table id="Despacho_table" class="table display">
+        <thead>
+            <tr>
+                <th>Codigo</th>
+                <th>Zona</th>
+                <th>Quien recibe</th>
+                <th>Fecha de llegada</th>
+                <th>Fecha de salida</th>
+                <th>Fecha de entrega</th>
+                <th>Estatus</th>
+                <th>Motivo final</th>
+                <th>Fecha de visita</th>
+                <th>Usuario</th>
+                <th>¿Cobro?</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</main>
 @endsection
 
-
 @section('js')
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
+        $( function() {
+            $( ".datepicker" ).datepicker();
+        } );
+    </script>
+    <script>
         new Vue({
-            el: '#recoleccionLoad',
+            el: '#crud',
             mounted: function(){
                 this.getClient();
             },
             data:{
                 client: '',
                 product: '',
+                status: '',
                 unidad: {
                     unit_id: '',
                     unit_mount: ''
                 },
                 productDetail: {},
-                remesa:{
+                reporte:{
                     dateArrive: '',
                     dateClose: '',
                     remesaFormat: '',
                     product_id: '',
                     client_id: '',
+                    status_id: '',
                     mountTot: 0,
                     status: 1
                 },
+                getCrudList: {
+                    id: '',
+                    user: ''
+                },
+                client: '',
                 unidades: [],
             },
             methods:{
                 getClient: function(){
-                    axios.get('client').then( response =>{
+                    axios.get('reportes/client').then( response =>{
                         this.client = response.data;
                     });
-                    this.remesa.dateArrive = moment().format("DD/MM/YYYY");
+                    //this.remesa.dateArrive = moment().format("DD/MM/YYYY");
                 },
                 getStatus: function(id){
-                    axios.get('status/' + id.target.value).then(response =>{
-                        if(response.data.id != undefined){
-                            this.remesa.status = response.data.id;
-                        }else {
-                            this.remesa.status = 1;
-                        }
-                    });
+                    if(id.target.value != 0){
+                        console.log("entra");
+                        axios.get('catalogstatus/' + id.target.value).then(response =>{
+                            if(response.data.id != undefined){
+                                this.remesa.status = response.data.id;
+                            }else {
+                                this.remesa.status = 1;
+                            }
+                        });
+                    } else{
+                        console.log("NO entra");
+                        axios.get('reportes/status').then(response =>{
+                            this.status = response.data;
+                        });
+                    }
                 },
                 getProduct: function(id){
-                    axios.get('product/' + id.target.value).then(response =>{
-                        this.product = response.data;
-                    });
-                    this.getStatus(id);
-                    document.getElementById("product_id").disabled = false;
+                    if(id.target.value == 0){
+                        axios.get('product/all').then(response =>{
+                            this.product = response.data;
+                        });
+                        this.getStatus(id);
+                    } else{
+                        axios.get('product/' + id.target.value).then(response =>{
+                            this.product = response.data;
+                        });
+                        this.getStatus(id);
+                    }
                 },
                 getProductSelected: function(id){
                     axios.get('productSelected/' + id.target.value).then(response =>{

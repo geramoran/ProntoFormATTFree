@@ -34,10 +34,11 @@ Route::get('product/all', 'ProductController@all');
 Route::resource('product', 'ProductController');
 
 Route::get('user/all', 'UserController@all');
+Route::get('user/roles', 'UserController@roles');
 Route::resource('user', 'UserController');
 
-Route::get('usertype/all', 'UserTypeController@all');
-Route::resource('usertype', 'UserTypeController');
+Route::get('roles/all', 'RolesController@all');
+Route::resource('roles', 'RolesController');
 
 Route::get('inventario/all', 'InventarioController@all');
 Route::resource('inventario', 'InventarioController');
@@ -45,10 +46,18 @@ Route::resource('inventario', 'InventarioController');
 Route::get('despacho/all', 'DespachoController@all');
 Route::get('despacho/user', 'DespachoController@user');
 Route::get('despacho/area', 'DespachoController@area');
+Route::get('despacho/detail/{id}', 'DespachoController@detail');
 Route::get('despacho/unit/{id}', 'DespachoController@unit');
+Route::get('despacho/{id}/free', 'DespachoController@free');
+Route::get('despacho/status/{id}', 'DespachoController@status');
 Route::resource('despacho', 'DespachoController');
 
 Route::get('recibo/all', 'ReciboController@all');
+Route::get('recibo/user', 'ReciboController@user');
+Route::get('recibo/area', 'ReciboController@area');
+Route::get('recibo/detail/{id}', 'ReciboController@detail');
+Route::get('recibo/prontoform/{id}', 'ReciboController@prontoform');
+Route::get('recibo/pdf/{id}', 'ReciboController@pdf');
 Route::resource('recibo', 'ReciboController');
 
 Route::get('place/all', 'UbicacionController@all');
@@ -68,6 +77,12 @@ Route::get('remesa/productSelected/{id}', 'ProductController@productDetail');
 Route::get('remesa/detail/{id}', 'RemesaController@detail');
 Route::resource('remesa', 'RemesaController');
 
+Route::get('reportes', 'ReporteController@view');
+Route::get('reportes/all', 'ReporteController@all');
+Route::get('reportes/client', 'ClientController@all');
+Route::get('reportes/status', 'ReporteController@status');
+Route::get('reportes/status/{id}', 'ReporteController@statusbyid');
+
 Route::get('/clearCache', function() {
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
@@ -79,3 +94,6 @@ Route::get('/clearCache', function() {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::post('webhook', 'ProntoFormController@webhook');
+Route::post('webhook2', 'ProntoFormController@pdf');

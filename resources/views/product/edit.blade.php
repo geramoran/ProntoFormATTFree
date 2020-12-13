@@ -29,7 +29,7 @@
                         <input type="text" class="form-control" name="costoDevolucion" id="costoDevolucion" v-model="getCrudDetail.product.costoDevolucion">
                     </div>
                     <div class="form-group">
-                        <label for="Peso">Peso</label>
+                        <label for="Peso">Peso (en Kg)</label>
                         <input type="text" class="form-control" name="Peso" id="Peso" v-model="getCrudDetail.product.Peso">
                     </div>
                     <div class="form-group">

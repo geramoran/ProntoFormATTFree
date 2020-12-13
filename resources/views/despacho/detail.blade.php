@@ -7,7 +7,7 @@
 @section('content')
 <main id="despacho" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-        <h1 class="h1">Nuevo despacho</h1>
+        <h1 class="h1">Detalle de despacho</h1>
         <input type="submit" value="Agregar" class="btn btn-primary mb-2" @click="sendAll">
     </div>
     <form action="/despacho" method="POST">
@@ -15,19 +15,19 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="user_id">Usuarios</label>
-                <select name="user_id" id="user" class="form-control" v-model="user">
+                <select name="user_id" id="user" class="form-control" v-model="despacho.usuario_id">
                     <option v-for="user in users" :value="user.id">@{{user.id}} - @{{user.username}}</option>
                 </select>
             </div>
             <div class="form-group col-md-4">
                 <label for="area">Zona de entrega</label>
-                <select name="area" id="area" class="form-control" v-model="area">
+                <select name="area" id="area" class="form-control" v-model="despacho.area_id">
                     <option v-for="a in areas" :value="a.id">@{{a.id}} - @{{a.name}}</option>
                 </select>
             </div>
             <div class="form-group col-md-4">
                 <label for="deliveryDate">Fecha de despacho</label>
-                <input type="text" class="form-control" name="city" id="city" value=@php echo date('d/n/Y'); @endphp v-model="deliveryDate">
+                <input type="text" class="form-control" name="city" id="city" v-model="despacho.deliveryDate" readonly>
             </div>
             <div class="form-group col-md-6">
                 <label for="unitTot">Total de unidades</label>
@@ -43,8 +43,6 @@
             <h3>Unidades a enviar</h3>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Numero de unidad" name="unit_id" v-model="unit_id">
-                <input type="text" class="form-control" placeholder="Cantidad" name="unit_count" v-model="unit_count">
-                <input type="text" class="form-control" placeholder="Monto" name="unit_mount" v-model="unit_mount">
                 <div class="input-group-append">
                     <button class="btn btn-outline-success" type="button" id="button-addon2" v-on:click.prevent="addItem">Agregar</button>
                 </div>
@@ -78,19 +76,17 @@
             mounted: function(){
                 //this.getUser();
                 //this.getArea();
-                this.detail();
+                this.getDetail();
             },
             data:{
-                client: '',
-                product: '',
-                users: '',
                 unit_id: '',
                 unit_count: '',
                 unit_mount: '',
                 mountTot: 0,
                 unitTot: 0,
+                areas: '',
                 area: '',
-                areas: {},
+                users: '',
                 user: '',
                 deliveryDate: '',
                 unidad: {
@@ -101,17 +97,52 @@
                 despacho:{
                     usuario_id: '',
                     area_id: '',
-                    product_id: '',
-                    client_id: '',
-                    mountTot: 0
+                    mountTot: 0,
+                    deliveryDate: ''
                 },
                 statusArea: '',
                 unidades: [],
+                unitdelivery: [],
             },
             methods:{
+                getDetail: function(){
+                    var id = window.location.href.split('/').pop();
+                    axios.get('detail/' + id).then(response => {
+                        var unit = [];
+                        var sum = 0;
+                        this.users = response.data.users;
+                        this.areas = response.data.areas;
+                        this.unidades = response.data.units;
+                        if(Array.isArray(this.unidades)){
+                            this.unitTot = this.unidades.length;
+                        }
+                        this.despacho = {
+                            usuario_id: response.data.despacho.user.id,
+                            area_id: response.data.despacho.area.id,
+                            mountTot: 0,
+                            deliveryDate: moment(response.data.despacho.deliveryDate).format("DD/MM/YYYY")
+                        };
+                        this.unidades.forEach(function (u) {
+                            unit.push({
+                                barcode: u.unit.barcode,
+                                cantidad: u.count,
+                                id: u.unit.id,
+                                idProduct: u.unit.idProduct,
+                                idstatus: u.unit.idstatus,
+                                monto: u.mount,
+                                remesa: u.unit.remesa
+                            });
+                            sum = parseFloat(sum) + parseFloat(u.mount);
+                        });
+                        this.despacho.mountTot = this.mountTot = sum;
+                        this.unidades = unit;
+                    });
+                },
                 getUser: function(){
                     axios.get('/despacho/user').then(response =>{
                         this.users = response.data;
+                    }).catch(function (error){
+                        console.log(error);
                     });
                     this.deliveryDate = moment().format("DD/MM/YYYY");
                 },
@@ -156,6 +187,7 @@
                     this.unidad.unit_mount = 0;
                     this.unit_count = '';
                     this.unit_mount = '';
+                    this.unit_id = '';
                 },
                 deleteUnit: function(index){
                     this.remesa.mountTot = parseFloat(this.remesa.mountTot) - parseFloat(this.unidades[index].mount);
@@ -178,7 +210,7 @@
                         };
                         axios.post('/despacho', allData).then(response =>{
                             alert('Creado el despacho');
-                            window.location="http://127.0.0.1:8000/despacho";
+                            window.location=url + 'despacho';
                         });
                     }
                 }

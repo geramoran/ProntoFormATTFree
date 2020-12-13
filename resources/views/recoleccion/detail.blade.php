@@ -51,8 +51,8 @@
         </div>
 
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Numero de unidad" id="unit_id" name="unit_id" v-model="unidad.barcode" disabled>
-            <input type="text" class="form-control" placeholder="monto" name="unit_mount" id="unit_mount" v-model="unidad.mount" disabled>
+            <input type="text" class="form-control" placeholder="Numero de unidad" id="unit_id" name="unit_id" v-model="unidad.barcode" @keyup.enter="changeFocusMount" disabled>
+            <input type="text" class="form-control" placeholder="monto" name="unit_mount" id="unit_mount" v-model="unidad.mount" @keyup.enter="addTable" disabled>
             <div class="input-group-append">
                 <button class="btn btn-outline-success" type="button" id="addUnit" v-on:click.prevent="addTable" disabled>Agregar</button>
             </div>
@@ -110,6 +110,7 @@
                 productItem: '',
                 client_id: '',
                 unidades: [],
+                productDetail: '',
                 editar: false,
                 btnUnit: false
             },
@@ -156,14 +157,21 @@
                         this.productDetail = response.data;
                     });
                 },
+                changeFocusMount: function(){
+                    document.getElementById('unit_mount').focus();
+                },
                 addTable: function(){
+                    if(isNaN(this.unidad.unit_mount) || this.unidad.unit_mount == ""){
+                        this.unidad.unit_mount = 0;
+                    }
                     this.unidades.push({
                         barcode: this.unidad.barcode,
                         mount: this.unidad.mount
                     });
                     this.remesa.mountTot = parseFloat(this.remesa.mountTot) + parseFloat(this.unidad.mount);
                     this.unidad.barcode = '';
-                    this.unidad.mount = 0;
+                    this.unidad.mount = '';
+                    document.getElementById('unit_id').focus();
                 },
                 enableEdit: function() {
                     this.editar = true;
@@ -173,7 +181,9 @@
                     document.getElementById("unit_mount").disabled = false;
                     document.getElementById("addUnit").disabled = false;
                     this.btnUnit = true;
-
+                    axios.get('productSelected/' + this.remesa.product_id).then(response =>{
+                        this.productDetail = response.data;
+                    });
                 },
                 deleteUnit: function(index){
                     console.log(index);
@@ -190,7 +200,9 @@
                     };
                     axios.put('/remesa/' + this.remesa.remesa, allData).then(response =>{
                         alert('Remesa Actualizada');
-                        window.location="http://127.0.0.1:8000/remesa";
+                        window.location=url + 'remesa';
+                    }).catch(error =>{
+                        alert("Ocurrio un error");
                     });
                 }
             }

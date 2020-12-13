@@ -87,6 +87,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 
     <!-- Extras: MORE!!! JS libraries -->
+    <script>
+        var url = "http://127.0.0.1:8000/";
+    </script>
     @yield('js')
 </body>
 

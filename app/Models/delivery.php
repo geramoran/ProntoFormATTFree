@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class delivery extends Model
 {
     use HasFactory;
-    protected $table = 'delivery';
+    protected $table = 'deliverys';
     protected $primaryKey = 'id';
-    protected $fillable = ['user', 'deliveryDate', 'area'];
+    protected $fillable = ['user', 'deliveryDate', 'areas_id'];
     public $incrementing = true;
     public $timestamps = false;
 
@@ -21,4 +21,8 @@ class delivery extends Model
     public function unitdeliveries(){
         return $this->hasMany(unitdelivery::class, 'delivery', 'id');
     }
+    public function area(){
+        return $this->belongsTo(area::class, 'areas_id', 'id');
+    }
+
 }

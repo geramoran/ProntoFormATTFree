@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class level extends Model
 {
     use HasFactory;
-    protected $table = 'level';
+    protected $table = 'levels';
     protected $primaryKey = 'id';
     public $incrementing = true;
     protected $fillable = ["name"];

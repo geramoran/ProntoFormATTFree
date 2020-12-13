@@ -10,14 +10,27 @@ use Illuminate\Notifications\Notifiable;
 class user extends Authenticatable
 {
     use HasFactory, Notifiable;
-    protected $table = 'user';
+    protected $table = 'users';
     protected $primaryKey = 'id';
-    protected $fillable = ['username', 'email', 'password', 'create_time', 'usertype_id'];
+    protected $fillable = [
+        'username',
+        'email',
+        'create_time',
+        'roles_id',
+        'password',
+        'prontoform_user',
+        'name',
+        'phone',
+        'address',
+        'city',
+        'state',
+        'zipcode'
+    ];
     protected $hidden = ['password', 'token'];
     public $incrementing = true;
     public $timestamps = false;
 
-    public function client(){
+    public function roles(){
         return $this->belongsTo(usertype::class);
     }
 

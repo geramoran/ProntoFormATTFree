@@ -37,162 +37,143 @@
 @endsection
 
 @section('js')
-    <script>
-        new Vue({
-            el: '#crud',
-            beforeMount: function() {
-                this.crud = this.$el.attributes['crud'].value;
-            },
-            mounted: function(){
-                this.getCrud();
-            },
-            data: {
-                lists: [],
-                errors: '',
-                crud: '',
-                getCrudList: [],
-                getCrudDetail: {
-                    client: {},
-                    product: {
-                        client: {}
-                    },
-                    relplace: {
-                        warehouse: {},
-                        locate: {},
-                        level: {}
-                    },
+<script>
+    new Vue({
+        el: '#crud',
+        beforeMount: function() {
+            this.crud = this.$el.attributes['crud'].value;
+        },
+        mounted: function(){
+            this.getCrud();
+        },
+        data: {
+            lists: [],
+            errors: '',
+            crud: '',
+            getCrudList: [],
+            getCrudDetail: {
+                client: {},
+                product: {
+                    client: {}
+                },
+                relplace: {
                     warehouse: {},
                     locate: {},
                     level: {}
                 },
-                fd: [],
-                unit: '',
-                unitsRows: [],
-                client: '',
-                products: ''
+                warehouse: {},
+                locate: {},
+                level: {}
             },
-            methods: {
-                getCrud: function(){
-                    axios.get(this.crud + '/all').then(response => {
-                        this.getCrudList = response.data;
-                    });
-                },
-                createCrud: function(){
-                    switch(this.crud){
-                        case 'catalogstatus':
-                            this.fd = new FormData(document.getElementById('createCatalogStatus'));
-                        break;
-                        case 'area':
-                            this.fd = new FormData(document.getElementById('createArea'));
-                        break;
-                        case 'client':
-                            this.fd = new FormData(document.getElementById('createClient'));
-                        break;
-                        case 'product':
-                            this.fd = new FormData(document.getElementById('createProduct'));
-                        break;
-                        case 'place':
-                            this.fd = new FormData(document.getElementById('createPlace'));
-                        break;
-                        case 'user':
-                            this.fd = new FormData(document.getElementById('createUser'));
-                        break;
-                    }
-                    axios.post(this.crud, this.fd).then(response => {
-                        this.getCrud(this.crud);
-                        $('#create').modal('hide');
-                        //toastr.success('Creada con éxito');
-                        this.fd = [];
-                    }).catch(error => {
-                        this.errors = 'Corrija para poder crear con éxito';
-                        this.fd = [];
-                    });
-                },
-                detailCrud: function(idCrud){
-                    axios.get(this.crud + '/' + idCrud).then( response => {
-                        this.getCrudDetail = response.data;
-                        $('#detail').modal('show');
-                    });
-                },
-                editCrud: function(idCrud){
-                    $('.modal').modal('hide');
-                    axios.get(this.crud + '/' + idCrud + '/edit').then( response => {
-                        this.getCrudDetail = response.data;
-                        $('#edit').modal('show');
-                    });
-                },
-                updateCrud: function(idCrud){
-                    var sendUp = '';
-                    switch(this.crud){
-                        case 'product':
-                            sendUp = {
-                                "name": this.getCrudDetail.product.name,
-                                "client_id": this.getCrudDetail.product.client_id,
-                                "costoEntrega": this.getCrudDetail.product.costoEntrega,
-                                "costoDevolucion": this.getCrudDetail.product.costoDevolucion,
-                                "Peso": this.getCrudDetail.product.Peso,
-                                "comisionEntrega": this.getCrudDetail.product.comisionEntrega,
-                                "comisionDevolucion": this.getCrudDetail.product.comisionDevolucion,
-                                "tiempoCierre": this.getCrudDetail.product.tiempoCierre,
-                                "nivelServicio": this.getCrudDetail.product.nivelServicio,
-                                "tieneCobro": this.getCrudDetail.product.tieneCobro
-                            };
-                        break;
-                        case 'place':
-                            sendUp = {
-                                "warehouse_id": this.getCrudDetail.relplace.warehouse_id,
-                                "locate_id": this.getCrudDetail.relplace.locate_id,
-                                "level_id": this.getCrudDetail.relplace.level_id,
-                            };
-                        break;
-                        case 'user':
-                            sendUp: {
+            fd: [],
+            unit: '',
+            unitsRows: [],
+            client: '',
+            products: ''
+        },
+        methods: {
+            getCrud: function(){
+                axios.get(this.crud + '/all').then(response => {
+                    this.getCrudList = response.data;
+                });
+            },
+            createCrud: function(){
+                this.fd = new FormData(document.getElementById('createProduct'));
+                axios.post(this.crud, this.fd).then(response => {
+                    this.getCrud(this.crud);
+                    $('#create').modal('hide');
+                    //toastr.success('Creada con éxito');
+                    this.fd = [];
+                }).catch(error => {
+                    this.errors = 'Corrija para poder crear con éxito';
+                    this.fd = [];
+                });
+            },
+            detailCrud: function(idCrud){
+                axios.get(this.crud + '/' + idCrud).then( response => {
+                    this.getCrudDetail = response.data;
+                    $('#detail').modal('show');
+                });
+            },
+            editCrud: function(idCrud){
+                $('.modal').modal('hide');
+                axios.get(this.crud + '/' + idCrud + '/edit').then( response => {
+                    this.getCrudDetail = response.data;
+                    $('#edit').modal('show');
+                });
+            },
+            updateCrud: function(idCrud){
+                var sendUp = '';
+                switch(this.crud){
+                    case 'product':
+                        sendUp = {
+                            "name": this.getCrudDetail.product.name,
+                            "client_id": this.getCrudDetail.product.client_id,
+                            "costoEntrega": this.getCrudDetail.product.costoEntrega,
+                            "costoDevolucion": this.getCrudDetail.product.costoDevolucion,
+                            "Peso": this.getCrudDetail.product.Peso,
+                            "comisionEntrega": this.getCrudDetail.product.comisionEntrega,
+                            "comisionDevolucion": this.getCrudDetail.product.comisionDevolucion,
+                            "tiempoCierre": this.getCrudDetail.product.tiempoCierre,
+                            "nivelServicio": this.getCrudDetail.product.nivelServicio,
+                            "tieneCobro": this.getCrudDetail.product.tieneCobro
+                        };
+                    break;
+                    case 'place':
+                        sendUp = {
+                            "warehouse_id": this.getCrudDetail.relplace.warehouse_id,
+                            "locate_id": this.getCrudDetail.relplace.locate_id,
+                            "level_id": this.getCrudDetail.relplace.level_id,
+                        };
+                    break;
+                    case 'user':
+                        sendUp: {
 
-                            }
-                        break;
-                        default:
-                            sendUp = this.getCrudDetail;
-                        break;
-                    }
-                    axios.put(this.crud + '/' + idCrud, sendUp).then( response => {
-                        this.getCrud(this.crud);
-                        $('#edit').modal('hide');
-                        //toastr.success('Creada con éxito');
-                        this.fd = [];
+                        }
+                    break;
+                    default:
+                        sendUp = this.getCrudDetail;
+                    break;
+                }
+                axios.put(this.crud + '/' + idCrud, sendUp).then( response => {
+                    this.getCrud(this.crud);
+                    $('#edit').modal('hide');
+                    //toastr.success('Creada con éxito');
+                    this.fd = [];
+                });
+            },
+            deleteCrud: function(idCrud){
+                if(window.confirm('¿Desea eliminar dicho registro?')){
+                    axios.delete(this.crud + '/' + idCrud).then(response => { //eliminamos
+                        $('.modal').modal('hide');
+                        this.getCrud(); //listamos
+                        //toastr.success('Eliminado correctamente'); //mensaje
                     });
-                },
-                deleteCrud: function(idCrud){
-                    if(window.confirm('¿Desea eliminar dicho registro?')){
-                        axios.delete(this.crud + '/' + idCrud).then(response => { //eliminamos
-                            $('.modal').modal('hide');
-                            this.getCrud(); //listamos
-                            //toastr.success('Eliminado correctamente'); //mensaje
-                        });
-                    }
-                },
-                switchCrudCreate: function(idfunction, nameFunction){
-                    var fds = new FormData(document.getElementById(idfunction));
-                    axios.post(nameFunction, fds).then(response => {
-                        this.getCrud(this.crud);
-                        //toastr.success('Creada con éxito');
-                        this.fd = [];
-                    }).catch(error => {
-                        this.errors = 'Corrija para poder crear con éxito';
-                        this.fd = [];
-                    });
-                },
-                switchCrudDelete: function(idfunction, nameFunction){
-                    axios.delete(nameFunction + '/' + idfunction).then(response => {
-                        this.getCrud(this.crud);
-                        //toastr.success('Creada con éxito');
-                        this.fd = [];
-                    }).catch(error => {
-                        this.errors = 'Corrija para poder crear con éxito';
-                        this.fd = [];
-                    });
-                },
-            }
-        });
+                }
+            },
+            switchCrudCreate: function(idfunction, nameFunction){
+                var fds = new FormData(document.getElementById(idfunction));
+                axios.post(nameFunction, fds).then(response => {
+                    this.getCrud(this.crud);
+                    //toastr.success('Creada con éxito');
+                    this.fd = [];
+                }).catch(error => {
+                    this.errors = 'Corrija para poder crear con éxito';
+                    this.fd = [];
+                });
+            },
+            switchCrudDelete: function(idfunction, nameFunction){
+                axios.delete(nameFunction + '/' + idfunction).then(response => {
+                    this.getCrud(this.crud);
+                    //toastr.success('Creada con éxito');
+                    this.fd = [];
+                }).catch(error => {
+                    this.errors = 'Corrija para poder crear con éxito';
+                    this.fd = [];
+                });
+            },
+        }
+    });
 
-    </script>
+</script>
 @endsection

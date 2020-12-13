@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class remesa extends Model
 {
     use HasFactory;
-    protected $table = 'remesa';
+    protected $table = 'remesas';
     protected $primaryKey = 'remesa';
     protected $fillable = [
         'dateArrive', 'dateClose', 'client_id', 'status_id', 'unitCount', 'mountTot'

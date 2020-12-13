@@ -16,7 +16,18 @@
                     </div>
                     <div class="form-group">
                         <label for="type">Tipo</label>
-                        <input type="text" class="form-control" name="type" id="type" v-model="getCrudDetail.type">
+                        <select name="type" id="type" class="form-control">
+                            <option value="Recoleccion - Capturado">Recoleccion - Remesa</option>
+                            <option value="Recoleccion - Boveda">Recoleccion - Almacen</option>
+                            <option value="Despacho - Creado">Despacho - Creado</option>
+                            <option value="Despacho - Transito">Despacho - Liberado</option>
+                            <option value="Despacho - Entregado">Despacho - Entregado</option>
+                            <option value="Despacho - Cancelado">Despacho - Cancelado</option>
+                            <option value="Unidad - Almacen">Unidad - Almacen</option>
+                            <option value="Unidad - Salida">Unidad - Salida</option>
+                            <option value="Unidad - Devolucion">Unidad - Devolucion</option>
+                            <option value="Unidad - Cancelado">Unidad - Cancelado</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="client_id">Cliente</label>

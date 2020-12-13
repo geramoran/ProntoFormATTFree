@@ -7,6 +7,7 @@ use App\Models\storage;
 use App\Models\unit;
 use App\Models\catalogStatus;
 use App\Models\remesa;
+use App\Models\product;
 
 class InventarioController extends Controller
 {
@@ -44,6 +45,17 @@ class InventarioController extends Controller
      */
     public function store(Request $request)
     {
+        // $unit = unit::where('remesa', $request->remesa)->get();
+        // $cid = product::find($unit->first()->idProduct)->first()->id;
+        // $cs = catalogStatus::where('type', 'Recoleccion - Almacen')->where('client_id', $cid)->get();
+        // $csid = 0;
+        // if(empty($cs)){
+        //     $csid = catalogStatus::where('type', 'Recoleccion - Almacen')->where('client_id', null)->first()->id;
+        // } else{
+        //     $csid = $cs->first()->id;
+        // }
+        //unit::where('remesa', $request->remesa)->update(['idstatus' => $csid]);
+        unit::where('remesa', $request->remesa)->update(['idstatus' => 2]);
         foreach($request->storage as $unidad){
             $storage = new storage;
             $storage->place = $unidad["place"];
@@ -52,11 +64,9 @@ class InventarioController extends Controller
         }
         $rem = remesa::find($request->remesa);
         $client = $rem->client_id;
-        $stat = catalogStatus::where('client_id', $client)->where('type', 'Recoleccion - Almacen')->first();
-        if($stat == null){
-            $stat = 2;
-        }
-        $rem->status_id = $stat;
+
+        //$rem->status_id = $csid;
+        $rem->status_id = 2;
         $rem->save();
         return $rem->status_id;
     }

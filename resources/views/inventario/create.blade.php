@@ -13,61 +13,63 @@
             <button class="btn btn-primary" @click="sendStorage">Guardar</button>
         </div>
     </div>
-    <form method="POST">
-        @csrf
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="remesa">Remesa</label>
-                <input type="text" class="form-control" placeholder="Numero de remesa" name="remesa" v-model="remesa.remesa" disabled>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="remesa">Remesa</label>
+            <input type="text" class="form-control" placeholder="Numero de remesa" name="remesa" v-model="remesa.remesa" disabled>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="client_id">Cliente</label>
+            <select name="client_id" id="client_id" class="form-control" @change="getProduct($event)" v-model="remesa.client_id" disabled>
+                <option v-for="c in client" :value="c.id">@{{c.id}} - @{{c.name}}</option>
+            </select>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="product_id">Producto</label>
+            <select name="product_id" id="product_id" class="form-control" @change="getProductSelected($event)" v-model="remesa.product_id" disabled>
+                <option v-for="p in product" :value="p.id">@{{p.id}} - @{{p.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="mountTot">Monto de cobro</label>
+        <input type="text" class="form-control" name="mountTot" id="mountTot" v-model="remesa.mountTot" disabled>
+    </div>
+    <br>
+    <div>
+        <h3>Unidades a registrar</h3>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Codigo de unidad</span>
             </div>
-            <div class="form-group col-md-4">
-                <label for="client_id">Cliente</label>
-                <select name="client_id" id="client_id" class="form-control" @change="getProduct($event)" v-model="remesa.client_id" disabled>
-                    <option v-for="c in client" :value="c.id">@{{c.id}} - @{{c.name}}</option>
-                </select>
+            <input type="text" class="form-control" name="unit_id" id="unitId" v-model="unidadSelect" @keyup.enter="changeFocus">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon3">Ubicacion</span>
             </div>
-            <div class="form-group col-md-4">
-                <label for="product_id">Producto</label>
-                <select name="product_id" id="product_id" class="form-control" @change="getProductSelected($event)" v-model="remesa.product_id" disabled>
-                    <option v-for="p in product" :value="p.id">@{{p.id}} - @{{p.name}}</option>
-                </select>
+            <select name="ubicacion" id="locate" class="custom-select" v-model="place" @keyup.enter="addItem">
+                <option v-for="place in places" :value="place.id">@{{place.id}} - @{{place.warehouse.name}} - @{{place.locate.name}} - @{{place.level.name}}</option>
+            </select>
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="button" id="button-addon2" v-on:click.prevent="addItem" placeholder="Ubicacion de almacen">Agregar</button>
             </div>
         </div>
-        <div class="form-group">
-            <label for="mountTot">Monto de cobro</label>
-            <input type="text" class="form-control" name="mountTot" id="mountTot" v-model="remesa.mountTot">
-        </div>
-        <br>
-        <div>
-            <h3>Unidades registradas</h3>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Numero de unidad" name="unit_id" v-model="unidadSelect">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="button" id="button-addon2" v-on:click.prevent="addItem()">Agregar</button>
-                </div>
-            </div>
-            <table id="Unit_table_inv" class="table display">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Monto</th>
-                        <th>Ubicación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(unit, index) in unidades" :class="unit.color">
-                        <td>@{{unit.barcode}}</th>
-                        <td>@{{unit.mount}}</th>
-                        <td>
-                            <select name="ubicacion" id="locate" class="form-control" v-model="unit.place">
-                                <option v-for="place in places" :value="place.id">@{{place.id}} - @{{place.warehouse.name}} - @{{place.locate.name}} - @{{place.level.name}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </form>
+        <table id="Unit_table_inv" class="table display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Monto</th>
+                    <th>Ubicación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(unit, index) in unidades" :class="unit.color">
+                    <td>@{{unit.barcode}}</th>
+                    <td>@{{unit.mount}}</th>
+                    <td>@{{unit.placename}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 @endsection
 
 
@@ -77,9 +79,10 @@
         new Vue({
             el: '#inventario',
             mounted: function(){
-                this.loadPlace();
+
             },
             created: function(){
+                this.loadPlace();
                 this.getDetail();
             },
             data:{
@@ -102,6 +105,7 @@
                     client_id: '',
                     mountTot: 0
                 },
+                place: '',
                 unidadSelect: '',
                 unidades: [],
             },
@@ -122,6 +126,7 @@
                                 id: item.id,
                                 color: '',
                                 place: '',
+                                placename: '',
                                 barcode: item.barcode,
                                 idProduct: item.idProduct,
                                 mount: item.mount,
@@ -142,13 +147,13 @@
                     this.getClient();
                     axios.get('remesa/detail/' + this.nRemesa).then( response =>{
                         this.remesa = response.data.remesa;
-                        //this.unidades = response.data.unidades;
+                        this.unidades = response.data.unidades;
                         console.log(response.data.unidades);
                         response.data.unidades.forEach((item) =>{
                             var unidadSel = {
                                 id: item.id,
                                 color: '',
-                                place: '',
+                                place: 0,
                                 barcode: item.barcode,
                                 idProduct: item.idProduct,
                                 mount: item.mount,
@@ -163,6 +168,7 @@
                         this.remesa.dateArrive = moment(this.remesa.dateArrive).format("DD/MM/YYYY");
                         this.remesa.dateClose = moment(this.remesa.dateClose).format("DD/MM/YYYY");
                         this.remesa.product_id = this.unidades[0].idProduct;
+                        document.getElementById('unit_id').focus();
                     });
                 },
                 getClient: function(){
@@ -170,24 +176,48 @@
                         this.client = response.data;
                     });
                 },
+                changeFocus: function(){
+                    document.getElementById('locate').focus();
+                },
                 addItem: function(){
-                    let ban = false;
-                    const result = this.unidades.filter(unitArray => {
+                    var ban = 0;
+                    this.unidades.filter(unitArray => {
                         if(unitArray.barcode === this.unidadSelect){
-                            unitArray.color = 'table-success';
-                            ban = true;
+                            if(this.place != ''){
+                                var placeSelect = [];
+                                this.places.forEach(result =>{
+                                    if(this.place === result.id){
+                                        placeSelect = result;
+                                    }
+                                });
+                                unitArray.color = 'table-success';
+                                unitArray.place = this.place;
+                                var wname = placeSelect.warehouse.name;
+                                var lname = placeSelect.locate.name;
+                                var nname = placeSelect.level.name;
+                                unitArray.placename = this.place + ' - ' + wname + ' - ' + lname + ' - ' + nname;
+                                ban = 3
+                            } else{
+                                ban = 1;
+                            }
+                        } else {
+                            if (ban == 0){
+                                ban = 2;
+                            }
                         }
                     });
-                    if(!ban){
-                        alert("El producto no se encuentra en esta remesa");
+                    switch(ban){
+                        case 2:
+                            alert("El producto no se encuentra en esta remesa");
+                        break;
+                        case 1:
+                            alert('Favor de seleccionar una ubicacion');
+                        break;
                     }
-                    {{-- this.unidades.push({
-                        id: this.unidad.unit_id,
-                        mount: this.unidad.unit_mount
-                    });
-                    this.remesa.mountTot = parseFloat(this.remesa.mountTot) + parseFloat(this.unidad.unit_mount);
                     this.unidad.unit_id = '';
-                    this.unidad.unit_mount = 0; --}}
+                    this.place = '';
+                    this.unidadSelect = '';
+                    document.getElementById('unitId').focus();
                 },
                 deleteUnit: function(index){
                     this.remesa.mountTot = parseFloat(this.remesa.mountTot) - parseFloat(this.unidades[index].mount);
@@ -219,7 +249,7 @@
                     } else{
                         axios.post('/inventario', index).then(response => {
                             alert("Inventario actualizado");
-                            window.location="http://127.0.0.1:8000/inventario";
+                            window.location=url + 'inventario';
                         });
                     }
                 }
