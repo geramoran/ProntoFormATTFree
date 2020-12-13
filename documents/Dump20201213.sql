@@ -37,7 +37,7 @@ CREATE TABLE `areas` (
 
 LOCK TABLES `areas` WRITE;
 /*!40000 ALTER TABLE `areas` DISABLE KEYS */;
-INSERT INTO `areas` VALUES (6,'Monterrey','Monterrey','Nuevo Leon'),(7,'laguna','Torreon','Coahuila'),(8,'uno','nuevo','hay'),(9,'1','ESTADO DE MEXICO','TULTITLAN'),(12,'Mazatlan','Mazatlan','Sinaloa'),(13,'Mazatlan','Mazatlan','Sinaloa');
+INSERT INTO `areas` VALUES (6,'Monterrey','Monterrey','Coahuila'),(7,'laguna','Torreon','Coahuila'),(8,'uno','nuevo','hay'),(9,'1','ESTADO DE MEXICO','TULTITLAN'),(12,'Mazatlan','Mazatlan','Sinaloa'),(13,'Mazatlan','Mazatlan','Sinaloa');
 /*!40000 ALTER TABLE `areas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,7 +54,7 @@ CREATE TABLE `catalogstatus` (
   `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `client_id` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `catalogstatus` (
 
 LOCK TABLES `catalogstatus` WRITE;
 /*!40000 ALTER TABLE `catalogstatus` DISABLE KEYS */;
-INSERT INTO `catalogstatus` VALUES (1,'Recoleccion','Recoleccion - Remesa',NULL),(2,'Almacen','Unidad',NULL),(3,'En transito','Unidad',NULL),(4,'Entregado','Unidad',NULL),(5,'Cancelado','Unidad',NULL),(9,'Nuevo','mundo',NULL),(13,'En Almacen','Recoleccion - Almacen',NULL),(14,'May','dd','9'),(15,'En Recoleccion','Recoleccion - Remesa','6');
+INSERT INTO `catalogstatus` VALUES (1,'Recoleccion','Recoleccion - Remesa',NULL),(2,'Almacen','Recoleccion - Almacen',NULL),(3,'Salida','Recoleccion - Salida',NULL),(4,'Creado','Despacho - Creado',NULL),(5,'En transito','Despacho - Liberado',NULL),(6,'Entregado','Despacho - Entregado',NULL),(7,'Cancelado','Despacho - Cancelado','');
 /*!40000 ALTER TABLE `catalogstatus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +117,7 @@ CREATE TABLE `deliverys` (
   KEY `udarea_idx` (`areas_id`),
   CONSTRAINT `udarea` FOREIGN KEY (`areas_id`) REFERENCES `areas` (`id`),
   CONSTRAINT `uduser` FOREIGN KEY (`user`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -126,7 +126,7 @@ CREATE TABLE `deliverys` (
 
 LOCK TABLES `deliverys` WRITE;
 /*!40000 ALTER TABLE `deliverys` DISABLE KEYS */;
-INSERT INTO `deliverys` VALUES (9,1,'2020-12-02 00:00:00',6),(10,2,'2020-12-02 00:00:00',6);
+INSERT INTO `deliverys` VALUES (12,1,'2020-12-11 00:00:00',9);
 /*!40000 ALTER TABLE `deliverys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,7 +225,7 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`),
   KEY `cliente_idx` (`client_id`),
   CONSTRAINT `cliente` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -234,7 +234,7 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (1,'niña',7,17000.00,14000.00,1.8400,2000.00,10000.00,10,30,0),(3,'mina',4,12.00,10.00,1.7500,12.00,11.00,5,60,0),(4,'mylag',2,20.00,20.00,20.0000,520.00,9.00,9,90,0),(10,'a',5,1200.00,1200.00,1.5000,120.00,120.00,2,50,0),(15,'aaaaaaa',6,1200.00,1200.00,1.5000,120.00,120.00,2,50,0),(20,'Rastreo',6,120.00,120.00,10.0000,20.00,10.00,15,69,0),(22,'kkkk',4,33.00,99.00,2.0000,22.00,22.00,2,1,0),(23,'ASD AZUL',10,68.00,89.00,0.9000,20.00,7.00,23,85,0),(24,'COD',10,120.00,89.00,0.9000,20.00,7.00,23,85,0),(26,'TRANSFERENCIAS DE 1 A 15',10,70.00,0.00,0.9000,20.00,7.00,23,85,0);
+INSERT INTO `products` VALUES (1,'niña',7,17000.00,14000.00,1.8400,2000.00,10000.00,10,30,0),(3,'mina',4,12.00,10.00,1.7500,12.00,11.00,5,60,0),(4,'mylag',2,20.00,20.00,20.0000,520.00,9.00,9,90,0),(10,'a',5,1200.00,1200.00,1.5000,120.00,120.00,2,50,0),(15,'aaaaaaa',6,1200.00,1200.00,1.5000,120.00,120.00,2,50,0),(20,'Rastreo',6,120.00,120.00,10.0000,20.00,10.00,15,69,0),(22,'kkkk',4,33.00,99.00,2.0000,22.00,22.00,2,1,0),(23,'ASD AZUL',10,68.00,89.00,0.9000,20.00,7.00,23,85,0),(24,'COD',10,120.00,89.00,0.9000,20.00,7.00,23,85,0),(26,'TRANSFERENCIAS DE 1 A 15',10,70.00,0.00,0.9000,20.00,7.00,23,85,0),(27,'aaa',10,12.00,12.00,1.5000,12.00,12.00,6,20,0);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,11 +265,12 @@ CREATE TABLE `prontoforms` (
   `FOTODEFACHADA` varchar(255) DEFAULT NULL,
   `FECHAYHORA` datetime DEFAULT NULL,
   `LOCALIZACIONGPS` longtext,
-  `MOTIVODENORECIBIR` varchar(30) DEFAULT NULL,
+  `MOTIVODENORECIBIR` varchar(100) DEFAULT NULL,
   `HORAYFECHADEREAGENDA` json DEFAULT NULL,
   `REFERENCENUMBER` varchar(100) DEFAULT NULL,
+  `COMENTARIOS` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +279,7 @@ CREATE TABLE `prontoforms` (
 
 LOCK TABLES `prontoforms` WRITE;
 /*!40000 ALTER TABLE `prontoforms` DISABLE KEYS */;
-INSERT INTO `prontoforms` VALUES (1,'klyns.27',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'klyns.27','1222',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'klyns.27','1222','120',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(4,'klyns.27','1222','120','SI','yo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-12-07 17:26:02',NULL,NULL,NULL,NULL),(5,'klyns.27','1222','120','SI','yo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-12-07 17:26:02',NULL,NULL,NULL,NULL),(6,'klyns.27','1222','120','SI','yo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-12-07 17:26:02','{\"latitude\":25.521649,\"longitude\":-103.3825289,\"altitude\":1100.2}',NULL,NULL,NULL);
+INSERT INTO `prontoforms` VALUES (54,'klyns.27','111','120','SI','alejandro marquez',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2020-12-12 03:51:13','{\"latitude\":25.5216536,\"longitude\":-103.3825331,\"altitude\":0}',NULL,NULL,'20201212-18165755145',NULL);
 /*!40000 ALTER TABLE `prontoforms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -343,7 +344,7 @@ CREATE TABLE `remesas` (
 
 LOCK TABLES `remesas` WRITE;
 /*!40000 ALTER TABLE `remesas` DISABLE KEYS */;
-INSERT INTO `remesas` VALUES (202011230,'2020-11-23 00:00:00','2020-11-25 00:00:00',4,2,55.00,2),(202011231,'2020-11-23 00:00:00','2020-12-08 00:00:00',6,2,89.00,2),(202011232,'2020-11-23 00:00:00','2020-11-25 00:00:00',5,2,880.00,1),(202011243,'2020-11-24 00:00:00','2020-11-29 00:00:00',4,1,0.00,1),(202011244,'2020-11-24 00:00:00','2020-11-24 00:00:00',5,3,4451.00,2),(202011305,'2020-11-30 00:00:00','2020-12-02 00:00:00',6,3,34643.00,15),(202012020,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(202012021,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(202012022,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,1,2.00,1),(202012023,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,1,2.00,1),(202012024,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,1,2.00,1),(202012025,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,1,5.00,1),(202012026,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(202012027,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(202012028,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(202012029,'2020-12-02 00:00:00','2020-12-25 00:00:00',10,0,0.00,1),(2020120310,'2020-12-03 00:00:00','2020-12-26 00:00:00',10,4,0.00,1),(2020120311,'2020-12-03 00:00:00','2020-12-26 00:00:00',10,4,1100.00,1),(2020120312,'2020-12-03 00:00:00','2020-12-26 00:00:00',10,2,0.00,1);
+INSERT INTO `remesas` VALUES (202012110,'2020-12-11 00:00:00','2020-12-13 00:00:00',5,2,12.00,2),(202012111,'2020-12-11 00:00:00','2020-12-20 00:00:00',2,2,2.00,2),(202012112,'2020-12-11 00:00:00','2020-12-20 00:00:00',2,3,6.00,2);
 /*!40000 ALTER TABLE `remesas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,18 +356,19 @@ DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `roles` (
-  `id` int NOT NULL,
-  `recoleccion` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `recibo` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `inventario` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `despacho` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `catalogos` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `usuarios` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `manifiestos` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `reportes` varchar(45) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `recoleccion` tinyint DEFAULT NULL,
+  `recibo` tinyint DEFAULT NULL,
+  `inventario` tinyint DEFAULT NULL,
+  `despacho` tinyint DEFAULT NULL,
+  `catalogos` tinyint DEFAULT NULL,
+  `usuarios` tinyint DEFAULT NULL,
+  `manifiestos` tinyint DEFAULT NULL,
+  `reportes` tinyint DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `pUser_idx` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,6 +377,7 @@ CREATE TABLE `roles` (
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
+INSERT INTO `roles` VALUES (3,1,1,1,1,1,1,1,1,'Administrador'),(8,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'otro');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -394,7 +397,7 @@ CREATE TABLE `storages` (
   KEY `wPlace_idx` (`place`),
   CONSTRAINT `wPlace` FOREIGN KEY (`place`) REFERENCES `relplaces` (`id`),
   CONSTRAINT `wUnit` FOREIGN KEY (`unit`) REFERENCES `units` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +406,7 @@ CREATE TABLE `storages` (
 
 LOCK TABLES `storages` WRITE;
 /*!40000 ALTER TABLE `storages` DISABLE KEYS */;
-INSERT INTO `storages` VALUES (1,1,4),(2,1,5),(3,1,2),(4,1,3),(5,1,2),(6,1,3),(7,1,13),(8,4,14),(9,1,15),(10,6,4),(11,1,5);
+INSERT INTO `storages` VALUES (18,1,39),(19,6,40),(20,6,41),(21,6,42),(22,4,41),(23,1,42),(24,1,43),(25,4,44),(26,4,45);
 /*!40000 ALTER TABLE `storages` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -434,7 +437,7 @@ CREATE TABLE `unitdeliverys` (
   CONSTRAINT `udReason` FOREIGN KEY (`reason`) REFERENCES `catalogstatus` (`id`),
   CONSTRAINT `udStatus` FOREIGN KEY (`visitStatus`) REFERENCES `catalogstatus` (`id`),
   CONSTRAINT `udUnit` FOREIGN KEY (`unit`) REFERENCES `units` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -443,7 +446,7 @@ CREATE TABLE `unitdeliverys` (
 
 LOCK TABLES `unitdeliverys` WRITE;
 /*!40000 ALTER TABLE `unitdeliverys` DISABLE KEYS */;
-INSERT INTO `unitdeliverys` VALUES (1,14,9,2,NULL,NULL,NULL,'NO',120,2),(2,24,9,2,NULL,NULL,NULL,'NO',2,2),(3,24,10,2,NULL,NULL,NULL,'NO',2,3);
+INSERT INTO `unitdeliverys` VALUES (5,42,12,6,NULL,'2020-12-12 01:34:32',NULL,'0',0,1);
 /*!40000 ALTER TABLE `unitdeliverys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -461,14 +464,14 @@ CREATE TABLE `units` (
   `barcode` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `idProduct` int NOT NULL,
   `mount` decimal(7,2) DEFAULT NULL,
+  `count` decimal(7,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uStatus_idx` (`idstatus`),
   KEY `uRemesa_idx` (`remesa`),
   KEY `uProduct_idx` (`idProduct`),
   CONSTRAINT `uProduct` FOREIGN KEY (`idProduct`) REFERENCES `products` (`id`),
-  CONSTRAINT `uRemesa` FOREIGN KEY (`remesa`) REFERENCES `remesas` (`remesa`),
   CONSTRAINT `uStatus` FOREIGN KEY (`idstatus`) REFERENCES `catalogstatus` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -477,7 +480,7 @@ CREATE TABLE `units` (
 
 LOCK TABLES `units` WRITE;
 /*!40000 ALTER TABLE `units` DISABLE KEYS */;
-INSERT INTO `units` VALUES (2,1,202011230,'42342',22,0.00),(3,1,202011230,'45343',22,55.00),(4,1,202011231,'3453458394058',20,23.00),(5,1,202011231,'23423427',20,66.00),(6,1,202011232,'94884',10,3.00),(7,1,202011232,'234234',10,877.00),(8,1,202011243,'22323421',3,0.00),(13,1,202011244,'555555',10,4.00),(14,1,202011244,'5555',10,3.00),(15,1,202011244,'5555',10,4444.00),(22,1,202011305,'3453453',15,66.00),(23,1,202011305,'34534333',15,44.00),(24,1,202011305,'555',15,34533.00),(25,1,202012025,'555',26,5.00),(26,1,2020120310,'MEX 1714211446CCI',26,0.00),(27,1,2020120310,'MEX 1714264341CCI',26,0.00),(28,1,2020120310,'MEX 1714345852CCI',26,0.00),(29,1,2020120310,'MEX 1714375735CCI',26,0.00),(30,1,2020120311,'MEX 1712881752CCI',24,100.00),(31,1,2020120311,'MEX 1714530791CCI',24,200.00),(32,1,2020120311,'MEX 1714561644CCI',24,300.00),(33,1,2020120311,'MEX 1711541998CCI',24,500.00),(34,1,2020120312,'MEX 1713124097CCI',26,0.00),(35,1,2020120312,'MEX 1713365306CCI',26,0.00);
+INSERT INTO `units` VALUES (39,1,202012110,'5555',10,10.00,NULL),(40,1,202012110,'11',10,2.00,NULL),(41,2,202012111,'11111',4,1.00,NULL),(42,2,202012111,'111',4,1.00,NULL),(43,2,202012112,'111',4,1.00,NULL),(44,2,202012112,'1111',4,2.00,NULL),(45,2,202012112,'1222',4,3.00,NULL);
 /*!40000 ALTER TABLE `units` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -492,11 +495,11 @@ CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `roles_id` int DEFAULT NULL,
-  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `idprontoformAtt` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `prontoform_user` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `phone` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `address` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -504,7 +507,7 @@ CREATE TABLE `users` (
   `state` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `zipcode` int DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -513,7 +516,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'aaaa','hola@hola.com','1234','2020-11-12 23:12:32',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'alfredo','alfredo@gmail.com','password','2020-11-13 00:11:42',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `users` VALUES (1,'aaaa','hola@hola.com','1234','2020-11-12 23:12:32',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'alfredo','alfredo@gmail.com','password','2020-11-13 00:11:42',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(11,'manuel','yo@yo.com','olakease','2020-12-09 19:13:37',3,NULL,'klyns.1','Manuel','8712345678','Ninguna','Lerdo','Durango',0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -574,4 +577,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-08 21:09:50
+-- Dump completed on 2020-12-13  2:23:06
