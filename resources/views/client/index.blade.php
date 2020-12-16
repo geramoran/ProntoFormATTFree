@@ -84,27 +84,112 @@
                         this.getCrudList = response.data;
                     });
                 },
+
+                //Función para validar un RFC
+                // https://jsfiddle.net/z8thbqh7/31/
+                rfcValido: function(rfc) {
+                    var re = /^([ A-ZÑ&]?[A-ZÑ&]{3}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$/,
+                        validado = rfc.match(re);
+                    
+                    if (!validado)  //Coincide con el formato general?
+                        return false;
+                    
+                    //Separar el dígito verificador del resto del RFC
+                    var digitoVerificador = validado.pop(),
+                        rfcSinDigito = validado.slice(1).join('')
+                        
+                    //Obtener el digito esperado
+                    var diccionario  = "0123456789ABCDEFGHIJKLMN&OPQRSTUVWXYZ Ñ",
+                        lngSuma      = 0.0,
+                        digitoEsperado;
+
+                    if (rfcSinDigito.length == 11) rfc = " " + rfc; //Ajustar a 12
+                    for(var i=0; i<13; i++)
+                        lngSuma = lngSuma + diccionario.indexOf(rfcSinDigito.charAt(i)) * (13 - i);
+                    digitoEsperado = 11 - lngSuma % 11;
+                    if (digitoEsperado == 11) digitoEsperado = 0;
+                    if (digitoEsperado == 10) digitoEsperado = "A";
+                
+                    //El dígito verificador coincide con el esperado?
+                    return digitoVerificador == digitoEsperado;
+                },
                 createCrud: function(){
-                    switch(this.crud){
-                        case 'catalogstatus':
-                            this.fd = new FormData(document.getElementById('createCatalogStatus'));
-                        break;
-                        case 'area':
-                            this.fd = new FormData(document.getElementById('createArea'));
-                        break;
-                        case 'client':
-                            this.fd = new FormData(document.getElementById('createClient'));
-                        break;
-                        case 'product':
-                            this.fd = new FormData(document.getElementById('createProduct'));
-                        break;
-                        case 'place':
-                            this.fd = new FormData(document.getElementById('createPlace'));
-                        break;
-                        case 'user':
-                            this.fd = new FormData(document.getElementById('createUser'));
-                        break;
+                    let cuentaErrores = 0;
+                    let mensaje = [];
+
+                    this.fd = new FormData(document.getElementById('createClient'));
+                    
+                    
+                    //------Validate form
+                    // Name should be 80 char max and not be empty
+                    if (this.fd.get('name').length > 80 || this.fd.get('name').length == 0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre de la compañía');
                     }
+
+                    //RFC Mexican unique format
+                    if(!this.rfcValido(this.fd.get('rfc').toUpperCase())){
+                        cuentaErrores ++;
+                        mensaje.push('RFC');
+                    }
+
+                    //Nombre del representante 80 char
+                    if(this.fd.get('agent').length > 80 || this.fd.get('agent').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre del Representante');
+                    }
+
+                    //dirección 255
+                    if(this.fd.get('address').length > 255 || this.fd.get('address').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Dirección');
+                    }
+
+                    //Zip code 5 numeros
+                    let zipCodeInt = parseInt(this.fd.get('zipcode'))
+                    if(this.fd.get('zipcode').length > 5 || this.fd.get('zipcode').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('ZIP se paso o vacío');
+                    }else if(isNaN(zipCodeInt)){
+                        mensaje.push('zip no es entero. peleishon.');
+                    }
+
+                    //City max 90 char
+                    if(this.fd.get('city').length > 90 || this.fd.get('city').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('ciudad');
+                    }
+                    
+                    //Estado 5o char
+                    if(this.fd.get('state').length > 50 || this.fd.get('state').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Estado');
+                    }
+
+                    //tel numeros enteros. 5 vhar
+                    let phoneInt = parseInt(this.fd.get('phone'))
+                    if(isNaN(phoneInt)){
+                        mensaje.push('teléfono no es entero. peleishon.');
+                    }
+
+                    //email... 
+                    expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if ( !expr.test(this.fd.get('email')) ){
+                        cuentaErrores ++;
+                        mensaje.push('email');
+                    }
+
+                    //mensaje de error
+                    if(cuentaErrores == 0){
+                        alert('JALA... supuestamente');
+                    } else{
+                        var total = '\n';
+                        mensaje.forEach( (input) =>{
+                            total = total + '\n' + input;
+                        });
+                        alert('Errores: ' + total);
+                    }
+
                     axios.post(this.crud, this.fd).then(response => {
                         this.getCrud(this.crud);
                         $('#create').modal('hide');
