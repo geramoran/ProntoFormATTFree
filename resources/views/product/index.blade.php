@@ -77,8 +77,88 @@
                     this.getCrudList = response.data;
                 });
             },
+
+
             createCrud: function(){
+                let cuentaErrores = 0;
+                let mensaje = [];
+
                 this.fd = new FormData(document.getElementById('createProduct'));
+                //------Validación de formularios
+                //nombre de producto max 90 char
+                if(this.fd.get('name').length > 90 || this.fd.get('name').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre de producto');
+                    }
+
+                //Costo de entrega 10 char 2 decimales
+                let costoEntregaNumber = Number(this.fd.get('costoEntrega'));
+                if(this.fd.get('costoEntrega').length > 10 || this.fd.get('costoEntrega').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Costo de entrega no contiene el número de caracteres permitido');
+                    }else if(isNaN(costoEntregaNumber)){
+                        mensaje.push('Costo de entrega no es un valor numérico');
+                    }
+
+                //Costo de devolución 10 char 2 decimales
+                let costoDevolucionNumber = Number(this.fd.get('costoDevolucion'));
+                if(this.fd.get('costoDevolucion').length > 10 || this.fd.get('costoDevolucion').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Costo de devolución no contiene el número de caracteres permitido');
+                    }else if(isNaN(costoDevolucionNumber)){
+                        mensaje.push('Costo de devolución no es un valor numérico');
+                    }
+
+                //Peso en kg 7 char 4 decimales
+                let PesoNumber = Number(this.fd.get('Peso'));
+                if(this.fd.get('Peso').length > 7 || this.fd.get('Peso').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Peso no contiene el número de caracteres permitido');
+                    }else if(isNaN(PesoNumber)){
+                        mensaje.push('Peso no es un valor numérico');
+                    }
+
+                //comisión de entrega 10 char 2 decimales
+                let comisionEntregaNumber = Number(this.fd.get('comisionEntrega'));
+                if(this.fd.get('comisionEntrega').length > 10 || this.fd.get('comisionEntrega').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Comisión de entrega no contiene el número de caracteres permitido');
+                    }else if(isNaN(comisionEntregaNumber)){
+                        mensaje.push('Comisión de entrega no es un valor numérico');
+                    }
+
+                //Comisión de devolución 10 char 2 decimales
+                let comisionDevolucionNumber = Number(this.fd.get('comisionDevolucion'));
+                if(this.fd.get('comisionDevolucion').length > 10 || this.fd.get('comisionDevolucion').length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Comisión de devolución no contiene el número de caracteres permitido');
+                    }else if(isNaN(comisionDevolucionNumber)){
+                        mensaje.push('Comisión de devolución no es un valor numérico');
+                    }
+
+                //Tiempo de cierre INT
+                let tiempoCierreInt = parseInt(this.fd.get('tiempoCierre'))
+                    if(isNaN(tiempoCierreInt)){
+                        mensaje.push('El tiempo de cierre debe ser un número entero.');
+                    }
+
+                //Nivel de servicio INT
+                let nivelServicioInt = parseInt(this.fd.get('nivelServicio'))
+                    if(isNaN(nivelServicioInt)){
+                        mensaje.push('Nivel de servicio debe ser un número entero.');
+                    }
+
+                //Salida/mensaje error
+                if(cuentaErrores == 0){
+                        alert('Los datos ingresados son correctos');
+                    } else{
+                        var total = '\n';
+                        mensaje.forEach( (input) =>{
+                            total = total + '\n' + input;
+                        });
+                        alert('Errores: ' + total);
+                    }
+
                 axios.post(this.crud, this.fd).then(response => {
                     this.getCrud(this.crud);
                     $('#create').modal('hide');

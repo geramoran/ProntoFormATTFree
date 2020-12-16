@@ -44,7 +44,7 @@
                         <input type="text" class="form-control" name="comisionDevolucion" id="comisionDevolucion">
                     </div>
                     <div class="form-group">
-                        <label for="tiempoCierre">Tiempo de Cierre</label>
+                        <label for="tiempoCierre">Tiempo de Cierre en horas</label>
                         <input type="text" class="form-control" name="tiempoCierre" id="tiempoCierre">
                     </div>
                     <div class="form-group">

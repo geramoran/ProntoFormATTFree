@@ -149,9 +149,9 @@
                     let zipCodeInt = parseInt(this.fd.get('zipcode'))
                     if(this.fd.get('zipcode').length > 5 || this.fd.get('zipcode').length ==0){
                         cuentaErrores ++;
-                        mensaje.push('ZIP se paso o vacío');
+                        mensaje.push('ZIP excede el número de caracteres o se encuentra vacío');
                     }else if(isNaN(zipCodeInt)){
-                        mensaje.push('zip no es entero. peleishon.');
+                        mensaje.push('zip no es un valor numérico');
                     }
 
                     //City max 90 char
@@ -166,10 +166,10 @@
                         mensaje.push('Estado');
                     }
 
-                    //tel numeros enteros. 5 vhar
+                    //tel numeros enteros. 5 char
                     let phoneInt = parseInt(this.fd.get('phone'))
                     if(isNaN(phoneInt)){
-                        mensaje.push('teléfono no es entero. peleishon.');
+                        mensaje.push('Teléfono no es entero.');
                     }
 
                     //email... 
@@ -181,7 +181,7 @@
 
                     //mensaje de error
                     if(cuentaErrores == 0){
-                        alert('JALA... supuestamente');
+                        alert('Los datos ingresados son correctos');
                     } else{
                         var total = '\n';
                         mensaje.forEach( (input) =>{
