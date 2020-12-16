@@ -135,12 +135,12 @@
                         sendUp = this.getCrudDetail;
                     break;
                 }
-                axios.put(this.crud + '/' + idCrud, sendUp).then( response => {
-                    this.getCrud(this.crud);
-                    $('#edit').modal('hide');
-                    //toastr.success('Creada con éxito');
-                    this.fd = [];
-                });
+                // axios.put(this.crud + '/' + idCrud, sendUp).then( response => {
+                //     this.getCrud(this.crud);
+                //     $('#edit').modal('hide');
+                //     //toastr.success('Creada con éxito');
+                //     this.fd = [];
+                // });
             },
             deleteCrud: function(idCrud){
                 if(window.confirm('¿Desea eliminar dicho registro?')){
