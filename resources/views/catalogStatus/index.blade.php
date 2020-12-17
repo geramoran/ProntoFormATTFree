@@ -84,35 +84,26 @@
                     });
                 },
                 createCrud: function(){
-                    switch(this.crud){
-                        case 'catalogstatus':
-                            this.fd = new FormData(document.getElementById('createCatalogStatus'));
-                        break;
-                        case 'area':
-                            this.fd = new FormData(document.getElementById('createArea'));
-                        break;
-                        case 'client':
-                            this.fd = new FormData(document.getElementById('createClient'));
-                        break;
-                        case 'product':
-                            this.fd = new FormData(document.getElementById('createProduct'));
-                        break;
-                        case 'place':
-                            this.fd = new FormData(document.getElementById('createPlace'));
-                        break;
-                        case 'user':
-                            this.fd = new FormData(document.getElementById('createUser'));
-                        break;
+
+                    this.fd = new FormData(document.getElementById('createCatalogStatus'));
+                    
+                    //-----Validaciones
+                    //Nombre 50 char
+                    if(this.fd.get('name').length > 50 || this.fd.get('name').length ==0){
+                        alert('Nombre está en blanco o no contiene la cantidad permitida de caracteres.');
+                    }else{
+                        alert('Los datos ingresados son correctos');
                     }
-                    axios.post(this.crud, this.fd).then(response => {
-                        this.getCrud(this.crud);
-                        $('#create').modal('hide');
-                        //toastr.success('Creada con éxito');
-                        this.fd = [];
-                    }).catch(error => {
-                        this.errors = 'Corrija para poder crear con éxito';
-                        this.fd = [];
-                    });
+                    
+                    // axios.post(this.crud, this.fd).then(response => {
+                    //     this.getCrud(this.crud);
+                    //     $('#create').modal('hide');
+                    //     //toastr.success('Creada con éxito');
+                    //     this.fd = [];
+                    // }).catch(error => {
+                    //     this.errors = 'Corrija para poder crear con éxito';
+                    //     this.fd = [];
+                    // });
                 },
                 detailCrud: function(idCrud){
                     axios.get(this.crud + '/' + idCrud).then( response => {
