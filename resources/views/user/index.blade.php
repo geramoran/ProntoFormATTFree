@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+@if(Auth::user()->roles()->first()->usuarios == 1)
 <main id="crud" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" crud="user">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <h1 class="h1">Usuarios</h1>
@@ -32,9 +33,21 @@
     @include('user.create')
     @include('user.edit')
 </main>
+@else
+    <main id="crud" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+        <div class="container">
+            <div class="row">
+                <div class="col align-self-center">
+                    NO TIENES PERMITIDO VER ESTA PANTALLA
+                </div>
+            </div>
+        </div>
+    </main>
+@endif
 @endsection
 
 @section('js')
+@if(Auth::user()->roles()->first()->usuarios == 1)
 <script>
     new Vue({
         el: '#crud',
@@ -49,6 +62,7 @@
             errors: '',
             crud: '',
             getCrudList: [],
+            getCrudDetail: '',
             user: {
                 username: '',
                 email: '',
@@ -76,8 +90,7 @@
             },
             createCrud: function(){
                 var req = {
-                    user: this.user,
-                    userdetail: this.userdetail
+                    user: this.user
                 }
                 axios.post(this.crud, this.user).then(response => {
                     this.getCrud(this.crud);
@@ -95,17 +108,7 @@
                 });
             },
             updateCrud: function(idCrud){
-                var sendUp = '';
-                switch(this.crud){
-                    case 'user':
-                        sendUp: {
-
-                        }
-                    break;
-                    default:
-                        sendUp = this.getCrudDetail;
-                    break;
-                }
+                var sendUp = this.user;
                 axios.put(this.crud + '/' + idCrud, sendUp).then( response => {
                     this.getCrud(this.crud);
                     $('#edit').modal('hide');
@@ -147,4 +150,5 @@
     });
 
 </script>
+@endif
 @endsection
