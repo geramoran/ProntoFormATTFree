@@ -95,15 +95,15 @@
                         alert('Los datos ingresados son correctos');
                     }
                     
-                    // axios.post(this.crud, this.fd).then(response => {
-                    //     this.getCrud(this.crud);
-                    //     $('#create').modal('hide');
-                    //     //toastr.success('Creada con éxito');
-                    //     this.fd = [];
-                    // }).catch(error => {
-                    //     this.errors = 'Corrija para poder crear con éxito';
-                    //     this.fd = [];
-                    // });
+                    axios.post(this.crud, this.fd).then(response => {
+                        this.getCrud(this.crud);
+                        $('#create').modal('hide');
+                        //toastr.success('Creada con éxito');
+                        this.fd = [];
+                    }).catch(error => {
+                        this.errors = 'Corrija para poder crear con éxito';
+                        this.fd = [];
+                    });
                 },
                 detailCrud: function(idCrud){
                     axios.get(this.crud + '/' + idCrud).then( response => {
