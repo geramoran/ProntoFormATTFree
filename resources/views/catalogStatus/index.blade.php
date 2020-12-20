@@ -87,13 +87,13 @@
 
                     this.fd = new FormData(document.getElementById('createCatalogStatus'));
                     
-                    //-----Validaciones
-                    //Nombre 50 char
-                    if(this.fd.get('name').length > 50 || this.fd.get('name').length ==0){
-                        alert('Nombre está en blanco o no contiene la cantidad permitida de caracteres.');
-                    }else{
-                        alert('Los datos ingresados son correctos');
-                    }
+                    // //-----Validaciones
+                    // //Nombre 50 char
+                    // if(this.fd.get('name').length > 50 || this.fd.get('name').length ==0){
+                    //     alert('Nombre está en blanco o no contiene la cantidad permitida de caracteres.');
+                    // }else{
+                    //     alert('Los datos ingresados son correctos');
+                    // }
                     
                     axios.post(this.crud, this.fd).then(response => {
                         this.getCrud(this.crud);

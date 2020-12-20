@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-@if(Auth::user()->roles()->first()->usuarios == 1)
 <main id="crud" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4" crud="user">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <h1 class="h1">Usuarios</h1>
@@ -33,21 +32,9 @@
     @include('user.create')
     @include('user.edit')
 </main>
-@else
-    <main id="crud" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-        <div class="container">
-            <div class="row">
-                <div class="col align-self-center">
-                    NO TIENES PERMITIDO VER ESTA PANTALLA
-                </div>
-            </div>
-        </div>
-    </main>
-@endif
 @endsection
 
 @section('js')
-@if(Auth::user()->roles()->first()->usuarios == 1)
 <script>
     new Vue({
         el: '#crud',
@@ -89,9 +76,75 @@
                 });
             },
             createCrud: function(){
-                var req = {
-                    user: this.user
-                }
+                //----Validaciones
+                let cuentaErrores = 0;
+                let mensaje = [];
+                
+                // name:
+                if(this.user.name.length > 45 || this.user.name.length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre debe tener hasta 45 caracteres');
+                    }
+
+                // address:
+
+                // zipcode:
+                // city:
+                // state:
+
+                // phone:
+                let phoneInt = parseInt(this.user.phone)
+                    if(isNaN(phoneInt)){
+                        mensaje.push('Teléfono debe ser un número');
+                    }
+
+                // email:
+                expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+                    if ( !expr.test(this.user.email) ){
+                        cuentaErrores ++;
+                        mensaje.push('Email no válido');
+                    }
+
+                // prontoform_user: 
+                    if(this.user.prontoform_user.length > 30 || this.user.prontoform_user.length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre de usuario prontoform no válido');
+                    }
+
+                // username:
+                if(this.user.username.length > 16 || this.user.username.length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Nombre de usuario debe tener hasta 50 caracteres');
+                    }
+                
+                // password:
+                let passwordValidate = this.user.password;
+                if(passwordValidate.length > 255 || passwordValidate.length ==0){
+                        cuentaErrores ++;
+                        mensaje.push('Contraseña no válida');
+                    }
+
+                //repeat pass
+                let passwordRepeat = this.passwordRep;
+                if(passwordRepeat.length == 0){
+                        cuentaErrores ++;
+                        mensaje.push('Debe repetir la contraseña');
+                }else if(passwordValidate != passwordRepeat){
+                        cuentaErrores ++;
+                        mensaje.push('La contraseña no coincide');
+                } 
+
+                //mensaje de error
+                if(cuentaErrores == 0){
+                        alert('Los datos ingresados son correctos');
+                    } else{
+                        var total = '\n';
+                        mensaje.forEach( (input) =>{
+                            total = total + '\n' + input;
+                        });
+                        alert('Se presentan errores en los siguientes campos: ' + total);
+                    }
+
                 axios.post(this.crud, this.user).then(response => {
                     this.getCrud(this.crud);
                     $('#create').modal('hide');
@@ -150,5 +203,4 @@
     });
 
 </script>
-@endif
 @endsection
